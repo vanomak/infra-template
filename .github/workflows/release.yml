@@ -1,9 +1,16 @@
 name: test
 run-name: ${{ github.actor }} is running the test
 on:
-  workflow_call:
+  push:
+    tags:
+      - rc-[0-9]+.[0-9]+.[0-9]+
 jobs:
-  test:
+  call-workflow:
+    name: test
+    uses: ./.github/workflows/test.yml
+  build:
+    needs: test
+    if: ${{ success }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/cache@v3
@@ -18,8 +25,11 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: '16.6.0'
-    - run: npm install
-    - run: npm ts
-    - name: linter
-      if: ${{ success() }}
-      run: npm lint
+    - run: echo "build now"
+    prepare_docker_image:
+      name: docker
+      needs: build
+      if: ${{ success }}
+      runs-on: ubuntu-latest
+      steps:
+        - run: echo "preapare docker"
