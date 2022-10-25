@@ -1,0 +1,5 @@
+name: push check
+on: [ push ]
+jobs:
+  call-workflow:
+    uses: test.yml@v1
