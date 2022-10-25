@@ -26,10 +26,10 @@ jobs:
       with:
         node-version: '16.6.0'
     - run: echo "build now"
-    prepare_docker_image:
-      name: docker
-      needs: build
-      if: ${{ success }}
-      runs-on: ubuntu-latest
-      steps:
-        - run: echo "preapare docker"
+  prepare_docker_image:
+    name: docker
+    needs: build
+    if: ${{ success }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "preapare docker"
