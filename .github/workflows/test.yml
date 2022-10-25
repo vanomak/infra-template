@@ -11,13 +11,16 @@ jobs:
           node-version: '16.6.0'
       - run: npm install
       - run: npm ts
-  test-ts:
-    needs: test-lint
-    runs-on: ubuntu-latest
-    steps:
+      - run: npm test
+        if: {{ success() }}
+
+#  test-ts:
+#    needs: test-lint
+#    runs-on: ubuntu-latest
+#    steps:
 #      - uses: actions/checkout@v3
 #      - uses: actions/setup-node@v3
 #        with:
 #          node-version: '16.6.0'
 #      - run: npm install
-      - run: npm test
+#      - run: npm test
