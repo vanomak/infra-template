@@ -12,7 +12,7 @@ jobs:
       - run: npm install
       - run: npm ts
       - name: linter
-        if: {{ success() }}
+        if: ${{ success() }}
         run: npm test
 
 #  test-ts:
