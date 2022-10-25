@@ -10,12 +10,10 @@ jobs:
         with:
           node-version: '16.6.0'
       - run: npm install
-      - name: ts
-        run: npm ts
+      - run: npm ts
       - name: linter
         if: {{ success() }}
-        steps:
-        - run: npm test
+        run: npm test
 
 #  test-ts:
 #    needs: test-lint
