@@ -24,6 +24,7 @@ jobs:
           dist
     - run: npm install
     - run: npm run build
+    - run: pwd
     - run: chmod +x ./.github/workflows/scripts/commits.sh && ./.github/workflows/scripts/commits.sh
     - run: node ./.github/workflows/scripts/reporter.js ${{ github.actor }}
 
