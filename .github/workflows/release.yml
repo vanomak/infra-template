@@ -17,15 +17,24 @@ jobs:
       with:
         node-version: '16.6.0'
         cache: 'npm'
+    - name: Get release version
+      run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
     - uses: actions/upload-artifact@v3
       with:
-        name: dist
+        name: ${{ env.GIT_TAG }}
         path: |
-          dist
+          build
     - run: npm install
     - run: npm run build
     - run: sh ./.github/scripts/commits.sh
     - run: node ./.github/scripts/reporter.js ${{ github.actor }}
+    - name: Build Docker container
+      run: | 
+        docker build -t vanomak/cra_app:${{ env.GIT_TAG }} .
+    - name: Login to DockerHub Registry
+      run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_LOGIN }} --password-stdin
+    - name: Publish to Docker Hub
+      run: docker push vanomak/cra_app:${{ env.GIT_TAG }}
 
   prepare_docker_image:
     name: docker
