@@ -12,23 +12,25 @@ jobs:
     if: ${{ success() }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/cache@v3
-      env:
-        cache-name: cache-node-modules
-      with:
-        path: ~/.node-modules
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-    - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
         node-version: '16.6.0'
-    - run: echo "build now"
+        cache: 'npm'
+    - uses: actions/checkout@v3
+    - uses: actions/upload-artifact@v3
+      with:
+        name: dist
+        path: |
+          dist
+    - run: npm ci
+    - run: npm build
+    - run: node ./.github/workflows/scripts/reporter.js
+
   prepare_docker_image:
     name: docker
     needs: build
     if: ${{ success() }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "preapare docker"
+      - run: echo "prepare docker"
+
