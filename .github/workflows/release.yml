@@ -22,7 +22,7 @@ jobs:
         name: dist
         path: |
           dist
-    - run: npm ci
+    - run: npm install
     - run: npm build
     - run: node ./.github/workflows/scripts/reporter.js
 

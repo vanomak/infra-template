@@ -11,7 +11,7 @@ jobs:
       with:
         node-version: '16.6.0'
         cache: 'npm'
-    - run: npm сi
+    - run: npm install
     - run: npm ts
     - name: linter
       if: ${{ success() }}
