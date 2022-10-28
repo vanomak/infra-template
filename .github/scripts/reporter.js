@@ -31,7 +31,7 @@ function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, desc
     });
 }
 
-function addComment(trackerToken, trackerOrgId, tagId) {
+function addComment(trackerToken, trackerIssueId, trackerOrgId, tagId) {
   const text = `Собрали и опубликовали <a href="https://hub.docker.com/r/vanomak/cra_app">образ</a> с тегом ${tagId}`;
   const options = {
     headers: getCommonHeaders(trackerToken, trackerOrgId),
@@ -66,5 +66,7 @@ updateIssueDescription(
 );
 addComment(
   process.env.TRACKER_TOKEN,
-  process.env.TRACKER_ORG_ID
+  process.env.TRACKER_ISSUE_ID,
+  process.env.TRACKER_ORG_ID,
+  process.env.GIT_TAG
 );
