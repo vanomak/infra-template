@@ -28,12 +28,15 @@ function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, desc
     });
 }
 
-fs.readFile('./content.txt').then(contents => {
-  console.log(contents)
-  updateIssueDescription(
-    process.env.TRACKER_TOKEN,
-    process.env.TRACKER_ISSUE_ID,
-    process.env.TRACKER_ORG_ID,
-    contents
-  );
-});
+const contents = fs.readFileSync('./content.txt',
+  {
+    encoding: 'utf8'
+  }
+);
+console.log(contents)
+updateIssueDescription(
+  process.env.TRACKER_TOKEN,
+  process.env.TRACKER_ISSUE_ID,
+  process.env.TRACKER_ORG_ID,
+  contents
+);

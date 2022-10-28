@@ -26,7 +26,7 @@ jobs:
         name: ${{ env.GIT_TAG }}
         path: |
           build
-    - run: chmod +x ./.github/scripts/commits.sh && ./.github/scripts/commits.sh
+    - run: chmod +x ./.github/scripts/commits.sh && ./.github/scripts/commits.sh > content.txt
     - run: cat ./content.txt
     - name: Update Tracker ticket
       env:
