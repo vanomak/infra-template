@@ -32,9 +32,9 @@ jobs:
       id: issue_content
       run: |
         echo 'ISSUE_DESCRIPTION<<EOF' >> $GITHUB_ENV
-        ./.github/scripts/commits.sh >> $GITHUB_ENV
+        bash ./.github/scripts/commits.sh >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
-    - run: echo "cont=${{ steps.issue_content.outputs.content }}"
+    - run: echo "cont=${{ env.ISSUE_DESCRIPTION }}"
     - name: Update Tracker ticket
       env:
         TRACKER_ISSUE_ID: ${{ secrets.TRACKER_ISSUE_ID }}
