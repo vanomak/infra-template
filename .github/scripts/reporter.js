@@ -3,10 +3,12 @@ const fetch = require("node-fetch");
 
 function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, description) {
   console.log(`trackerOrgId: ${trackerOrgId.split('').join('|')}`);
+  console.log(`trackerToken: ${trackerToken.split('').join('|')}`);
+  console.log(`trackerIssueId: ${trackerIssueId.split('').join('|')}`);
   fetch(`https://api.tracker.yandex.net/v2/issues/${trackerIssueId}`, {
     headers: {
       "Authorization": `Bearer ${trackerToken}`,
-      "Content-Type": "application/x-www-form-urlencoded",
+      "Content-Type": "application/json",
       "X-Org-ID": trackerOrgId,
     },
     method: "PATCH",
