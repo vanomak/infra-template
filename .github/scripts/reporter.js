@@ -2,7 +2,7 @@ const fs = require("fs");
 const fetch = require("node-fetch");
 
 function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, description) {
-  return fetch(`https://api.tracker.yandex.net/v2/issues/${trackerIssueId}`, {
+  fetch(`https://api.tracker.yandex.net/v2/issues/${trackerIssueId}`, {
     headers: {
       "Authorization": `Bearer ${trackerToken}`,
       "Content-Type": "application/x-www-form-urlencoded",
@@ -12,7 +12,17 @@ function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, desc
     body: JSON.stringify({
       description
     })
-  });
+  })
+    .then(response => {
+      if (!response.ok) throw `Ошибка при обновлении. Status: ${response.status}`;
+      return response.json();
+    })
+    .then(response => {
+      console.log("Задача в трекере успешно обновлена");
+    })
+    .catch(error => {
+      console.log("Не удалось обновить задачу", error.getMessage);
+    });
 }
 
 const contents = fs.readFileSync('./content.txt');
@@ -21,8 +31,4 @@ updateIssueDescription(
   process.env.TRACKER_ISSUE_ID,
   process.env.TRACKER_ORG_ID,
   contents
-).then(() => {
-  console.log("Задача в трекере успешно обновлена");
-}).catch(error => {
-  console.log("Не удалось обновить задачу", error.getMessage);
-});
+);
