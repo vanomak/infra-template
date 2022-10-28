@@ -28,6 +28,8 @@ jobs:
         cache: 'npm'
     - name: Get release version
       run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
+    - run: echo "GIT_TAG2=`echo $(git for-each-ref refs/tags/ --count=2 --sort=-refname | tail -1 | grep -oP -m 1 'rc-[0-9]+.[0-9]+.[0-9]+')`" >> $GITHUB_ENV
+    - run: echo "COMMITS=`echo $(git log --pretty=format:"%H %an %s%n" ${{ env.GIT_TAG }}...${{ env.GIT_TAG2 }})`" >> $GITHUB_ENV
     - run: npm ci
     - run: npm run build
     - uses: actions/upload-artifact@v3
