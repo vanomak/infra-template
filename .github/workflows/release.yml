@@ -29,14 +29,16 @@ jobs:
     - run: chmod +x ./.github/scripts/commits.sh
     - name: Create issue content
       id: issue_content
-      run: echo "issue_content=$(./.github/scripts/commits.sh)" >> $GITHUB_OUTPUT
+      run: |
+        echo 'ISSUE_DESCRIPTION<<EOF' >> $GITHUB_ENV
+        ./.github/scripts/commits.sh >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
     - run: echo "cont=${{ steps.issue_content.outputs.content }}"
     - name: Update Tracker ticket
       env:
         TRACKER_ISSUE_ID: ${{ secrets.TRACKER_ISSUE_ID }}
         TRACKER_TOKEN: ${{ secrets.TRACKER_TOKEN }}
         TRACKER_ORG_ID: ${{ secrets.TRACKER_ORG_ID }}
-        ISSUE_DESCRIPTION: "${{ steps.issue_content.outputs.issue_content }}"
       run: node ./.github/scripts/reporter.js
     - name: Build Docker container
       run: | 
