@@ -27,6 +27,7 @@ jobs:
         path: |
           build
     - run: chmod +x ./.github/scripts/commits.sh
+    - run: ./.github/scripts/commits.sh
     - name: Create issue content
       id: issue_content
       run: |
