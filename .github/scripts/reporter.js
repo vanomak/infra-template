@@ -2,10 +2,7 @@ const fs = require("fs");
 const fetch = require("node-fetch");
 
 function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, description) {
-  console.log(`trackerOrgId: ${trackerOrgId.split('').join('|')}`);
-  console.log(`trackerToken: ${trackerToken.split('').join('|')}`);
-  console.log(`trackerIssueId: ${trackerIssueId.split('').join('|')}`);
-  fetch(`https://api.tracker.yandex.net/v2/issues/${trackerIssueId}`, {
+  const options = {
     headers: {
       "Authorization": `Bearer ${trackerToken}`,
       "Content-Type": "application/json",
@@ -15,7 +12,9 @@ function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, desc
     body: JSON.stringify({
       description
     })
-  })
+  };
+  console.log("options", options);
+  fetch(`https://api.tracker.yandex.net/v2/issues/${trackerIssueId}`, options)
     .then(response => {
       if (!response.ok) throw `Ошибка при обновлении. Status: ${response.status}`;
       return response.json();
