@@ -29,7 +29,8 @@ jobs:
     - run: chmod +x ./.github/scripts/commits.sh
     - name: Create issue content
       id: issue_content
-      run: echo "::set-output name=content::$(./.github/scripts/commits.sh)"
+      run: echo "content=$(./.github/scripts/commits.sh)" >> $GITHUB_OUTPUT
+    - run: echo ${{ steps.issue_content.outputs.content }}
     - name: Update Tracker ticket
       env:
         TRACKER_ISSUE_ID: ${{ secrets.TRACKER_ISSUE_ID }}
