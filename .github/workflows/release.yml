@@ -19,19 +19,19 @@ jobs:
         cache: 'npm'
     - name: Get release version
       run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
+    - run: npm ci
+    - run: npm run build
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ env.GIT_TAG }}
         path: |
           build
-    - run: npm ci
-    - run: npm run build
     - run: sh ./.github/scripts/commits.sh
     - name: Update Tracker ticket
       env:
-        TRACKER_ISSUE_ID: ${{ env.TRACKER_ISSUE_ID }}
-        TRACKER_TOKEN: ${{ env.TRACKER_TOKEN }}
-        TRACKER_ORG_ID: ${{ env.TRACKER_ORG_ID }}
+        TRACKER_ISSUE_ID: ${{ secrets.TRACKER_ISSUE_ID }}
+        TRACKER_TOKEN: ${{ secrets.TRACKER_TOKEN }}
+        TRACKER_ORG_ID: ${{ secrets.TRACKER_ORG_ID }}
       run: node ./.github/scripts/reporter.js
     - name: Build Docker container
       run: | 
