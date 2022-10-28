@@ -10,7 +10,7 @@ function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, desc
     },
     method: "PATCH",
     body: JSON.stringify({
-      description
+      description: description.replace('\r', '\n')
     })
   };
   console.log("options", options);
@@ -28,15 +28,14 @@ function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, desc
     });
 }
 
-// const contents = fs.readFileSync('./content.txt',
-//   {
-//     encoding: 'utf8'
-//   }
-// );
-console.log(process.env.ISSUE_DESCRIPTION)
+const content = fs.readFileSync('./content.txt',
+  {
+    encoding: 'utf8'
+  }
+);
 updateIssueDescription(
   process.env.TRACKER_TOKEN,
   process.env.TRACKER_ISSUE_ID,
   process.env.TRACKER_ORG_ID,
-  process.env.ISSUE_DESCRIPTION
+  content
 );
