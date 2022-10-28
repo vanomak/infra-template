@@ -13,6 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - run: chmod +x ./.github/scripts/commits.sh
+    - run: ./.github/scripts/commits.sh
+    - name: Create issue content
+      id: issue_content
+      run: |
+        echo 'ISSUE_DESCRIPTION<<EOF' >> $GITHUB_ENV
+        echo $(./.github/scripts/commits.sh) >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
+    - run: echo "cont=${{ env.ISSUE_DESCRIPTION }}"
     - uses: actions/setup-node@v3
       with:
         node-version: '16.6.0'
@@ -26,15 +35,6 @@ jobs:
         name: ${{ env.GIT_TAG }}
         path: |
           build
-    - run: chmod +x ./.github/scripts/commits.sh
-    - run: ./.github/scripts/commits.sh
-    - name: Create issue content
-      id: issue_content
-      run: |
-        echo 'ISSUE_DESCRIPTION<<EOF' >> $GITHUB_ENV
-        echo $(./.github/scripts/commits.sh) >> $GITHUB_ENV
-        echo 'EOF' >> $GITHUB_ENV
-    - run: echo "cont=${{ env.ISSUE_DESCRIPTION }}"
     - name: Update Tracker ticket
       env:
         TRACKER_ISSUE_ID: ${{ secrets.TRACKER_ISSUE_ID }}
