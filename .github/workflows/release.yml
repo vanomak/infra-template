@@ -27,6 +27,7 @@ jobs:
         path: |
           build
     - run: sh ./.github/scripts/commits.sh
+    - run: cat ./content.txt
     - name: Update Tracker ticket
       env:
         TRACKER_ISSUE_ID: ${{ secrets.TRACKER_ISSUE_ID }}
