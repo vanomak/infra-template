@@ -1,19 +1,22 @@
 const fs = require("fs");
 const fetch = require("node-fetch");
 
+function getCommonHeaders(trackerToken, trackerOrgId) {
+  return {
+    "Authorization": `Bearer ${trackerToken}`,
+    "Content-Type": "application/json",
+    "X-Org-ID": trackerOrgId,
+  }
+}
+
 function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, description) {
   const options = {
-    headers: {
-      "Authorization": `Bearer ${trackerToken}`,
-      "Content-Type": "application/json",
-      "X-Org-ID": trackerOrgId,
-    },
+    headers: getCommonHeaders(trackerToken, trackerOrgId),
     method: "PATCH",
     body: JSON.stringify({
       description: description.replace('\r', '\n')
     })
   };
-  console.log("options", options);
   fetch(`https://api.tracker.yandex.net/v2/issues/${trackerIssueId}`, options)
     .then(response => {
       if (!response.ok) throw `Ошибка при обновлении. Status: ${response.status}`;
@@ -28,6 +31,28 @@ function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, desc
     });
 }
 
+function addComment(trackerToken, trackerOrgId, tagId) {
+  const text = `Собрали и опубликовали <a href="https://hub.docker.com/r/vanomak/cra_app">образ</a> с тегом ${tagId}`;
+  const options = {
+    headers: getCommonHeaders(trackerToken, trackerOrgId),
+    method: "POST",
+    body: JSON.stringify({
+      text
+    })
+  };
+  fetch(`https://api.tracker.yandex.net/v2/issues/${trackerIssueId}/comments`, options)
+    .then(response => {
+      if (!response.ok) throw `Ошибка при добавлении комментария. Status: ${response.status}`;
+      return response.json();
+    })
+    .then(response => {
+      console.log("Комментарий успешно добавлен");
+    })
+    .catch(error => {
+      console.log("Ошибка", error);
+      process.exit(1);
+    });
+}
 const content = fs.readFileSync('./content.txt',
   {
     encoding: 'utf8'
@@ -38,4 +63,8 @@ updateIssueDescription(
   process.env.TRACKER_ISSUE_ID,
   process.env.TRACKER_ORG_ID,
   content
+);
+addComment(
+  process.env.TRACKER_TOKEN,
+  process.env.TRACKER_ORG_ID
 );

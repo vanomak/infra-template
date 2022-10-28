@@ -30,12 +30,6 @@ jobs:
         name: ${{ env.GIT_TAG }}
         path: |
           build
-    - name: Update Tracker ticket
-      env:
-        TRACKER_ISSUE_ID: ${{ secrets.TRACKER_ISSUE_ID }}
-        TRACKER_TOKEN: ${{ secrets.TRACKER_TOKEN }}
-        TRACKER_ORG_ID: ${{ secrets.TRACKER_ORG_ID }}
-      run: node ./.github/scripts/reporter.js
     - name: Build Docker container
       run: | 
         docker build -t vanomak/cra_app:${{ env.GIT_TAG }} .
@@ -43,6 +37,12 @@ jobs:
       run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_LOGIN }}" --password-stdin
     - name: Publish to Docker Hub
       run: docker push vanomak/cra_app:${{ env.GIT_TAG }}
+    - name: Update Tracker ticket
+      env:
+        TRACKER_ISSUE_ID: ${{ secrets.TRACKER_ISSUE_ID }}
+        TRACKER_TOKEN: ${{ secrets.TRACKER_TOKEN }}
+        TRACKER_ORG_ID: ${{ secrets.TRACKER_ORG_ID }}
+      run: node ./.github/scripts/reporter.js
 
   prepare_docker_image:
     name: docker
@@ -51,4 +51,3 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "prepare docker"
-
