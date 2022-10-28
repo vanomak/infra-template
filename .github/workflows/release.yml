@@ -27,7 +27,10 @@ jobs:
     - run: npm install
     - run: npm run build
     - run: sh ./.github/scripts/commits.sh
-    - run: node ./.github/scripts/reporter.js ${{ github.actor }}
+    - name: Update Tracker ticket
+      env:
+        TRACKER_ISSUE_ID: ${{ env.TRACKER_ISSUE_ID }}
+      run: node ./.github/scripts/reporter.js
     - name: Build Docker container
       run: | 
         docker build -t vanomak/cra_app:${{ env.GIT_TAG }} .
