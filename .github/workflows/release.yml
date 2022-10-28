@@ -24,7 +24,7 @@ jobs:
         name: ${{ env.GIT_TAG }}
         path: |
           build
-    - run: npm install
+    - run: npm ci
     - run: npm run build
     - run: sh ./.github/scripts/commits.sh
     - name: Update Tracker ticket
