@@ -2,7 +2,7 @@ const fs = require("fs");
 const fetch = require("node-fetch");
 
 function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, description) {
-  console.log(`trackerOrgId: ${trackerOrgId}`);
+  console.log(`trackerOrgId: ${trackerOrgId.split('').join('|')}`);
   fetch(`https://api.tracker.yandex.net/v2/issues/${trackerIssueId}`, {
     headers: {
       "Authorization": `Bearer ${trackerToken}`,
@@ -23,6 +23,7 @@ function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, desc
     })
     .catch(error => {
       console.log("Не удалось обновить задачу", error);
+      process.exit(1);
     });
 }
 
