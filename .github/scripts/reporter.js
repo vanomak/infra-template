@@ -9,11 +9,16 @@ function getCommonHeaders(trackerToken, trackerOrgId) {
   }
 }
 
-function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, description) {
+function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, releaseTag, description) {
+  const date = new Date();
+  const formattedDate = `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()}`;
+  const summary = `Релиз ${releaseTag} от ${formattedDate}`;
+
   const options = {
     headers: getCommonHeaders(trackerToken, trackerOrgId),
     method: "PATCH",
     body: JSON.stringify({
+      summary,
       description: description.replace('\r', '\n')
     })
   };
@@ -31,8 +36,8 @@ function updateIssueDescription(trackerToken, trackerIssueId, trackerOrgId, desc
     });
 }
 
-function addComment(trackerToken, trackerIssueId, trackerOrgId, tagId) {
-  const text = `Собрали и опубликовали <a href="https://hub.docker.com/r/vanomak/cra_app">образ</a> с тегом ${tagId}`;
+function addComment(trackerToken, trackerIssueId, trackerOrgId, releaseTag) {
+  const text = `Собрали и опубликовали <a href="https://hub.docker.com/r/vanomak/cra_app">образ</a> с тегом ${releaseTag}`;
   const options = {
     headers: getCommonHeaders(trackerToken, trackerOrgId),
     method: "POST",
@@ -62,6 +67,7 @@ updateIssueDescription(
   process.env.TRACKER_TOKEN,
   process.env.TRACKER_ISSUE_ID,
   process.env.TRACKER_ORG_ID,
+  process.env.GIT_TAG,
   content
 );
 addComment(
