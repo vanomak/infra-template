@@ -12,7 +12,7 @@ jobs:
         node-version: '16.6.0'
         cache: 'npm'
     - run: npm ci
-    - run: npm ts
+    - run: npm run ts
     - name: linter
       if: ${{ success() }}
       run: npm run lint
